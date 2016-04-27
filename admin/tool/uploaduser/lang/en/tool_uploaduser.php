@@ -32,6 +32,7 @@ $string['deleteerrors'] = 'Delete errors';
 $string['encoding'] = 'Encoding';
 $string['errormnetadd'] = 'Can not add remote users';
 $string['errors'] = 'Errors';
+$string['invalidtheme'] = 'theme does not exists';
 $string['nochanges'] = 'No changes';
 $string['pluginname'] = 'User upload';
 $string['renameerrors'] = 'Rename errors';

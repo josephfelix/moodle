@@ -72,10 +72,12 @@ $struserauthunsupported     = get_string('userauthunsupported', 'error');
 $stremailduplicate          = get_string('useremailduplicate', 'error');
 
 $strinvalidpasswordpolicy   = get_string('invalidpasswordpolicy', 'error');
+$strinvalidtheme            = get_string('invalidtheme', 'tool_uploaduser');
 $errorstr                   = get_string('error');
 
 $stryes                     = get_string('yes');
 $strno                      = get_string('no');
+
 $stryesnooptions = array(0=>$strno, 1=>$stryes);
 
 $returnurl = new moodle_url('/admin/tool/uploaduser/index.php');
@@ -96,6 +98,7 @@ $STD_FIELDS = array('id', 'username', 'email',
         'suspended',   // 1 means suspend user account, 0 means activate user account, nothing means keep as is for existing users
         'deleted',     // 1 means delete user
         'mnethostid',  // Can not be used for adding, updating or deleting of users - only for enrolments, groups, cohorts and suspending.
+        'theme', // Define a theme for user when 'allowuserthemes' is enabled
     );
 // Include all name fields.
 $STD_FIELDS = array_merge($STD_FIELDS, get_all_user_name_fields());
@@ -352,6 +355,14 @@ if ($formdata = $mform2->is_cancelled()) {
             $upt->track('username', s($originalusername).'-->'.s($user->username), 'info');
         } else {
             $upt->track('username', s($user->username), 'normal', false);
+        }
+
+        //validate theme
+        if (isset($user->theme)) {
+            if (empty($CFG->allowuserthemes) or !in_array($user->theme, explode(',', $CFG->themelist))) {
+                $user->theme = '';
+                $upt->track('theme', s($strinvalidtheme), 'error');
+            }
         }
 
         // add default values for remaining fields
